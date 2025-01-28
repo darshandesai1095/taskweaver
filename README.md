@@ -23,7 +23,7 @@ npm install taskweaver
 ```
 ## Sequential Workflow
 
-This example simulates a basic sequential workflow where task execution is dependent on the completion of the previous tasks. By default, the process will start from the task(s) which have no dependencies, in this case taskA.
+This example simulates a basic sequential workflow where task execution is dependent on the completion of the previous tasks. By default, the process will start from the task(s) which have no dependencies, in this case, taskA.
 
 ```javascript
 
