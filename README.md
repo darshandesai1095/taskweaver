@@ -21,9 +21,7 @@ Install TaskWeaver via npm:
 ```bash
 npm install taskweaver
 ```
-## Getting Started
-
-#### Basic Example:
+## Sequential Workflow
 
 This example simulates a basic sequential workflow where tasks execution is dependent on completion of the previous tasks. By default, the process will start from the task(s) which have no dependencies, in this case taskA.
 
@@ -70,7 +68,7 @@ workflow.start().then(() => {
 });
 ```
 
-#### Advanced Example:
+## Branched Workflow
 
 This example simulates a process where tasks execute based on conditions and dependencies. If the conditions are met, parallel tasks execute, and there are additional branches that handle user validation, data processing, and finalization.
 
@@ -232,9 +230,9 @@ workflow.start();
 
 ```
 
-### Configuration Options
+## Configuration Options
 
-#### Task Configuration
+### Task
 When creating a workflow, you can customize the behavior of individual tasks by specifying the following properties:
 
 
@@ -260,8 +258,7 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 
 
 
-#### Workflow Configuration
-
+### Workflow
 
 
 | Property           | Type                                                       | Description                                                                                                 |
@@ -274,7 +271,7 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 
 
 
-### Dynamic Task Insertion
+## Dynamic Task Insertion
 You can dynamically add new tasks to an ongoing workflow. When a task is added, it automatically updates the dependencies and determines if the new task can be executed immediately.
 
 ```bash
@@ -290,11 +287,11 @@ You can dynamically add new tasks to an ongoing workflow. When a task is added, 
 This feature enables dynamic modification of a workflow during its execution. By calling the workflow.addTask(newTask: Task) method within a task’s action callback, you can introduce new tasks into the workflow and trigger subsequent tasks based on evolving conditions, offering flexibility to adapt the workflow in real-time as the process progresses.
 
 
-### Summarizing the Workflow
+## Summarizing the Workflow
 The describe method generates an ASCII-based flowchart representing the task dependencies in your workflow.
 
 ```bash
-workflow.visualize();
+workflow.describe();
 ```
 
 This will print a flowchart to the console that visually shows how tasks are related and executed.
