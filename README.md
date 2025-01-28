@@ -144,11 +144,11 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 | `dependencies` | `string[]`                                                         | An optional list of task names that need to complete before this task can run.                          |
 | `branches`     | `Array<{ condition: (result: any) => boolean; next: string[] }>`   | Conditional branching based on the result. Specifies which tasks to run based on conditions.            |
 | `default`      | `string[]`                                                         | Optional default tasks to run if no branch conditions are met.                                          |
-| `next`         | `string &#124; string[]`                                           | Defines the next task(s) to run after this task completes.                                              |
+| `next`         | `string[]`                                                         | Defines the next task(s) to run after this task completes.                                              |
 | `input`        | `(results: Record<string, any>) => any`                            | A function that provides input to the task based on previous results.                                   |
 | `timeout`      | `number`                                                           | An optional timeout (in milliseconds) for how long the task should be allowed to run.                   |
 | `retry`        | `{ maxAttempts: number; delay: number }`                           | Retry logic specifying max attempts and delay (in milliseconds) between retries.                        |
-| `onStart`      | `(task: Task) => void &#124; Promise<void>`                        | Optional callback that gets invoked when the task starts.                                               |
+| `onStart`      | `(task: Task) => void \| Promise<void>`                            | Optional callback that gets invoked when the task starts.                                               |
 | `onComplete`   | `(result: Record<string, any>) => any`                             | Callback function for task completion. Can return the next task(s) or `null` to finish.                 |
 | `onError`      | `(error: Error, task: Task, results: Record<string, any>) => any`  | Callback function for when an error occurs during task execution.                                       |
 | `metadata`     | `Record<string, any>`                                              | Optional metadata related to the task (e.g., for logging or tracking).                                  |
@@ -166,7 +166,6 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 | `ref`              | `string`                                                         | The reference or identifier for the workflow.                                                                       |
 | `tasks`            | `Record<string, Task>`                                           | A record of tasks in the workflow, with task names as keys and `Task` objects as values.                            |
 | `results`          | `Record<string, any>`                                            | A record of task results, where the task name is the key, and the result of the task is the value.                  |
-| `status`           | `'Pending' &#124; 'Running' &#124; 'Completed' &#124; 'Failed' &#124; 'Cancelled'`   | The current status of the workflow.                                                                                 |
 | `newTasksQueue`    | `Task[]`                                                         | A queue of tasks that are newly added to the workflow.                                                              |
 
 
