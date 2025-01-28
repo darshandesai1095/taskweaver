@@ -144,7 +144,7 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 | `dependencies` | `string[]`                                                         | An optional list of task names that need to complete before this task can run.                          |
 | `branches`     | `Array<{ condition: (result: any) => boolean; next: string[] }>`   | Conditional branching based on the result. Specifies which tasks to run based on conditions.            |
 | `default`      | `string[]`                                                         | Optional default tasks to run if no branch conditions are met.                                          |
-| `next`         | `string[]`                                                         | Defines the next task(s) to run after this task completes.                                              |
+| `next`         | `string \| string[]`                                               | Defines the next task(s) to run after this task completes.                                              |
 | `input`        | `(results: Record<string, any>) => any`                            | A function that provides input to the task based on previous results.                                   |
 | `timeout`      | `number`                                                           | An optional timeout (in milliseconds) for how long the task should be allowed to run.                   |
 | `retry`        | `{ maxAttempts: number; delay: number }`                           | Retry logic specifying max attempts and delay (in milliseconds) between retries.                        |
@@ -163,7 +163,7 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 
 | Property           | Type                                                             | Description                                                                                                         |
 |--------------------|------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| `ref`              | `string`                                                         | The reference or identifier for the workflow.                                                                       |
+| `id`               | `string`                                                         | The reference or identifier for the workflow.                                                                       |
 | `tasks`            | `Record<string, Task>`                                           | A record of tasks in the workflow, with task names as keys and `Task` objects as values.                            |
 | `results`          | `Record<string, any>`                                            | A record of task results, where the task name is the key, and the result of the task is the value.                  |
 | `newTasksQueue`    | `Task[]`                                                         | A queue of tasks that are newly added to the workflow.                                                              |
