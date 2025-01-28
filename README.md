@@ -169,6 +169,9 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 | `options.onTaskStart`      | `(task: Task) => void \| Promise<void>`                          | A callback function triggered when a task starts execution. Can be used for logging or monitoring task initiation.  |
 | `options.onTaskComplete`   | `(task: Task) => void \| Promise<void>`                          | A callback function triggered when a task completes execution. Useful for logging, monitoring, or triggering events.  |
 | `options.onTaskError`      | `(task: Task) => void \| Promise<void>`                          | A callback function triggered when a task encounters an error. Allows handling errors, retries, or cleanup actions. |
+
+<!--
+
 | `connectors`          | `Record<string, Connector>)`                                  | A connector for interacting with REST APIs.                                                        |
 | `connectors.rest`      | `(RESTConnector`                          | A callback function triggered when a task starts execution. Can be used for logging or monitoring task initiation.  |
 | `connectors.redis`   | `RedisConnector`                          | A connector for interacting with Redis for caching or data storage.  |
@@ -177,7 +180,7 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 | `connectors.mongoDB`   | `MongoDBConnector`                          | A connector for interacting with MongoDB databases.  |
 | `connectors.email`      | `EmailConnector`                          | A connector for sending emails via various email services like Gmail or custom SMTP.|
 
-
+-->
 
 ## Dynamic Task Insertion
 You can dynamically add new tasks to an ongoing workflow. When a task is added, it automatically updates the dependencies and determines if the new task can be executed immediately. By calling the workflow.addTask(newTask: Task) method within a task’s action callback, you can introduce new tasks into the workflow and trigger subsequent tasks based on evolving conditions, offering flexibility to adapt the workflow in real-time as the process progresses.
@@ -249,6 +252,8 @@ startup
     └── taskB
          └── taskC
 ```
+
+<!--
 
 ## Connectors
 
@@ -422,6 +427,9 @@ workflow.start().catch((error) => {
 
 
 ```
+
+-->
+
 
 
 ## License
