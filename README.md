@@ -21,16 +21,11 @@ Install TaskWeaver via npm:
 ```bash
 npm install taskweaver
 ```
-## Documentation
-
-### Example Workflows
-
-Here are some  examples to get started with the Workflow class:
+## Getting Started
 
 #### Basic Example:
 
-This example simulates a basic sequential workflow where tasks execution is dependent on completion of the previous tasks:
-
+This example simulates a basic sequential workflow where tasks execution is dependent on completion of the previous tasks. By default, the process will start from the task(s) which have no dependencies, in this case taskA.
 
 ```bash
 
@@ -243,7 +238,7 @@ workflow.start();
 When creating a workflow, you can customize the behavior of individual tasks by specifying the following properties:
 
 
-```bash
+
 | Property       | Type                                                      | Description                                                                                   |
 |----------------|-----------------------------------------------------------|-----------------------------------------------------------------------------------------------|
 | `name`         | `string`                                                  | The name of the task.                                                                          |
@@ -263,12 +258,12 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 | `runIf`        | `(results: Record<string, any>) => boolean`               | A function that determines whether the task should run based on previous results.              |
 | `logs`         | `string[]`                                                | Optional array to store logs related to the task.                                              |
 
-```
+
 
 #### Workflow Configuration
 
 
-```bash
+
 | Property           | Type                                                       | Description                                                                                                 |
 |--------------------|------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
 | `ref`              | `string`                                                   | The reference or identifier for the workflow.                                                                |
@@ -277,7 +272,7 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 | `status`           | `'Pending' | 'Running' | 'Completed' | 'Failed' | 'Cancelled'` | The current status of the workflow (can be one of these values: `Pending`, `Running`, `Completed`, `Failed`, `Cancelled`). |
 | `newTasksQueue`    | `Task[]`                                                   | A queue of tasks that are newly added to the workflow.                                                       |
 
-```
+
 
 ### Dynamic Task Insertion
 You can dynamically add new tasks to an ongoing workflow. When a task is added, it automatically updates the dependencies and determines if the new task can be executed immediately.
