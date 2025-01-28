@@ -141,8 +141,8 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 |----------------|--------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
 | `name`         | `string`                                                           | The name of the task.                                                                                   |
 | `action`       | `(input?: any) => Promise<any>`                                    | The function that will be executed for this task. It returns a promise with the result.                 |
-| `dependencies` | `string[]`                                                         | An optional list of task names that need to complete before this task can run.                          |
-| `branches`     | `Array<{ condition: (result: any) => boolean; next: string[] }>`   | Conditional branching based on the result. Specifies which tasks to run based on conditions.            |
+| `dependencies` | `string[]`                                                         | An optional list of task names that must be completed before this task can run. By default, the workflow infers dependencies, but additional dependencies can be specified here if needed.  |
+| `branches`     | `Array<{ condition: (result: any) => boolean; next: string[] }>`   | Conditional branching based on the result. Specifies which tasks to run based on conditions.  |
 | `default`      | `string[]`                                                         | Optional default tasks to run if no branch conditions are met.                                          |
 | `next`         | `string \| string[]`                                               | Defines the next task(s) to run after this task completes.                                              |
 | `input`        | `(results: Record<string, any>) => any`                            | A function that provides input to the task based on previous results.                                   |
