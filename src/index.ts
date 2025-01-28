@@ -1,6 +1,6 @@
 import { Workflow } from './core/Workflow';
-
-// Example Workflow with Parallel Tasks, Dependencies, and Advanced Features
+import { Task } from './types/TaskTypes';
+export { Workflow, Task };
 
 // const workflow = new Workflow(
 //     'exampleWorkflow',
