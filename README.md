@@ -371,7 +371,57 @@ await emailConnector.sendPlainTextEmail(
 |                      | `auth.pass`               | `string`                         | The email account's password or an app-specific password.                                                                                                 | `auth: { user: 'your-email@gmail.com', pass: 'your-app-password' }`                                                |
 |                      | `from`                    | `string`                         | The "from" email address when sending emails (usually the same as the `auth.user`).                                                                        | `from: 'your-email@gmail.com'`                                                                                      |
 
----
+```js
+
+import { Task, Workflow, RESTConnector } from 'taskweaver';
+
+// Define the RESTConnector with necessary configuration
+const restConnector = new RESTConnector({
+  baseUrl: 'https://jsonplaceholder.typicode.com',
+  headers: { 'Authorization': 'Bearer your-token' },
+  timeout: 5000, // Optional timeout for the requests
+});
+
+// Define a task that uses the RESTConnector to fetch user data from the API
+const fetchUserDataTask: Task = {
+  name: 'fetchUserData',
+  action: async () => {
+    try {
+      // Using the RESTConnector to make a GET request to an API endpoint
+      const response = await restConnector.get('/users/1');
+      return response; // Returns the response data
+    } catch (error) {
+      throw new Error(`Failed to fetch user data: ${error.message}`);
+    }
+  },
+  next: 'processUserData', // Next task in the workflow
+};
+
+// Define the next task that processes the fetched user data
+const processUserDataTask: Task = {
+  name: 'processUserData',
+  action: async (input: any) => {
+    // Process the fetched user data (e.g., log or manipulate it)
+    console.log('Fetched User Data:', input);
+  },
+};
+
+// Create a new workflow with these tasks
+const workflow = new Workflow({
+  id: 'user-data-workflow',
+  tasks: {
+    fetchUserData: fetchUserDataTask,
+    processUserData: processUserDataTask,
+  },
+});
+
+// Start the workflow
+workflow.start().catch((error) => {
+  console.error('Workflow failed:', error);
+});
+
+
+```
 
 
 ## License
