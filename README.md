@@ -12,7 +12,7 @@ TaskWeaver is a simple workflow management system for orchestrating workflows us
 - **Retries**: Automatically retry failed tasks with configurable limits.
 - **Timeouts**: Tasks have configurable timeouts for their execution.
 - **Error Handling**: Built-in error handling and detailed logs.
-- **Small and Lightweight**: Minimal footprint, ideal for Node.js applications.
+
 
 ## Installation
 
@@ -61,11 +61,7 @@ const tasks: Task[] = [
 
 const workflow = new Workflow(tasks);
 
-workflow.start().then(() => {
-  console.log('All tasks completed!');
-}).catch(error => {
-  console.error('Workflow failed:', error);
-});
+workflow.start()
 ```
 
 ## Branched Workflow
