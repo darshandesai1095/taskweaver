@@ -25,7 +25,7 @@ npm install taskweaver
 
 This example simulates a basic sequential workflow where tasks execution is dependent on completion of the previous tasks. By default, the process will start from the task(s) which have no dependencies, in this case taskA.
 
-```bash
+```javascript
 
 import { Workflow, Task } from 'taskweaver';
 
@@ -73,7 +73,7 @@ workflow.start().then(() => {
 This example simulates a process where tasks execute based on conditions and dependencies. If the conditions are met, parallel tasks execute, and there are additional branches that handle user validation, data processing, and finalization.
 
 
-```bash
+```javascript
 import { Workflow, Task } from 'taskweaver';
 
 const tasks: Task[] = [
@@ -178,14 +178,44 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 ## Dynamic Task Insertion
 You can dynamically add new tasks to an ongoing workflow. When a task is added, it automatically updates the dependencies and determines if the new task can be executed immediately.
 
-```bash
+```javascript
   const newTask: Task = {
       name: 'taskD',
       action: async () => { ... },
-      dependencies: ['taskA', 'taskB'],
+      dependencies: ['taskA', 'taskB'], // taskD will execute immediatly after taskA and taskB have completed
   };
 
   workflow.addTask(newTask);
+```
+
+```javascript
+// Dynamically adding a new task and branching based on a runtime condition
+workflow.tasks['start'].action = async () => {
+    console.log('Start task executed');
+    const result = { type: 'A' }; // Simulate some result
+    
+    // Dynamically add taskD if a certain condition is met
+    if (result.type === 'A') {
+        const newTask: Task = {
+            name: 'taskD',
+            action: async () => {
+                console.log('Task D executed');
+                return { value: 'New task D result' };
+            },
+            next: 'taskC', // Connect taskD to taskC
+            timeout: 2000,
+        };
+
+        // Add new taskD to the workflow
+        workflow.addTask(newTask);
+
+        // Modify branching logic for 'start' to include taskD
+        workflow.tasks['start'].branches[0].next.push('taskD');
+    }
+    
+    return result;
+};
+
 ```
 
 This feature enables dynamic modification of a workflow during its execution. By calling the workflow.addTask(newTask: Task) method within a task’s action callback, you can introduce new tasks into the workflow and trigger subsequent tasks based on evolving conditions, offering flexibility to adapt the workflow in real-time as the process progresses.
@@ -194,7 +224,7 @@ This feature enables dynamic modification of a workflow during its execution. By
 ## Summarizing the Workflow
 The describe method generates an ASCII-based flowchart representing the task dependencies in your workflow.
 
-```bash
+```javascript
 workflow.describe();
 ```
 
@@ -202,7 +232,7 @@ This will print a flowchart to the console that visually shows how tasks are rel
 
 Example Output:
 
-```bash
+```javascript
 startup
     ├── taskA
     │    └── taskC
