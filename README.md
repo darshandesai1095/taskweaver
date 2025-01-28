@@ -5,12 +5,12 @@ TaskWeaver is a simple workflow management system for orchestrating workflows us
 ## Features
 
 - **DAG-based Workflow Orchestration**: Define workflows with tasks and their dependencies.
-- **Retries**: Automatically retry failed tasks with configurable limits.
 - **Task Dependencies**: Tasks can depend on other tasks, which must be completed before the dependent task starts.
 - **Parallelism**: Execute independent tasks concurrently for maximum efficiency.
-- **Timeouts**: Tasks have configurable timeouts for their execution.
 - **Event Handling**: Custom callbacks for task start, completion, and error handling.
 - **Dynamic Task Insertion**: Tasks can be added dynamically after the workflow has started, and their dependencies are managed.
+- **Retries**: Automatically retry failed tasks with configurable limits.
+- **Timeouts**: Tasks have configurable timeouts for their execution.
 - **Error Handling**: Built-in error handling and detailed logs.
 - **Small and Lightweight**: Minimal footprint, ideal for Node.js applications.
 
@@ -77,142 +77,49 @@ This example simulates a process where tasks execute based on conditions and dep
 import { Workflow, Task } from 'taskweaver';
 
 const tasks: Task[] = [
-    // Start task: Initializes the workflow and determines the initial condition
     {
         name: 'start',
         action: async () => {
             console.log('Start task executed');
-            return { type: 'A' };  // Return some result to dictate the flow
+            return { type: 'A' };  // Return some result
         },
         branches: [
             {
                 condition: (result) => result.type === 'A',
-                next: ['taskA', 'taskB'], // Parallel execution of TaskA and TaskB
+                next: ['taskA', 'taskB'], // Parallel tasks
             },
             {
                 condition: (result) => result.type === 'B',
-                next: ['taskB'], // Only TaskB will be executed if type is 'B'
-            },
+                next: ['taskC'],
+            }
         ],
-        default: ['taskC'],  // Default next task if no conditions match
-        timeout: 3000,  // Timeout in ms
-        retry: { maxAttempts: 3, delay: 1000 },  // Retry strategy
-        onComplete: async (result) => {
-            console.log('Start task completed. Result:', result);
-        },
+        timeout: 3000,
+        retry: { maxAttempts: 3, delay: 1000 },
     },
-
-    // Task A: Executes after 'start' based on the condition type 'A'
     {
         name: 'taskA',
         action: async () => {
             console.log('Task A executed');
-            return { value: 42 };  // Return some data after completion
+            return { value: 42 };
         },
-        next: 'taskC',  // TaskC will execute after TaskA
+        next: 'taskC',
         timeout: 5000,
-        retry: { maxAttempts: 2, delay: 500 },
-        onComplete: async (result) => {
-            console.log('Task A completed. Result:', result);
-        },
     },
-
-    // Task B: Executes either after 'start' or in parallel with TaskA
     {
         name: 'taskB',
         action: async () => {
             console.log('Task B executed');
-            return { value: 100 };  // Return data
+            return { value: 100 };
         },
-        next: 'taskC',  // TaskC will execute after TaskB completes
-        timeout: 3000,
-        retry: { maxAttempts: 2, delay: 2000 },
-        onComplete: async (result) => {
-            console.log('Task B completed. Result:', result);
-        },
+        next: 'taskC',
     },
-
-    // Task C: Depends on the completion of TaskA and TaskB
     {
         name: 'taskC',
         action: async () => {
             console.log('Task C executed (depends on Task A and Task B)');
-            return { success: true };  // Indicate successful completion
+            return { success: true };
         },
-        dependencies: ['taskA', 'taskB'],  // Task C will not start until TaskA and TaskB are complete
-        timeout: 4000,
-        retry: { maxAttempts: 2, delay: 500 },
-        onComplete: async (result) => {
-            console.log('Task C completed. Result:', result);
-        },
-    },
-
-    // User Validation Task: Checks if user is valid before proceeding
-    {
-        name: 'validateUser',
-        action: async () => {
-            console.log('Validating user...');
-            // Simulate user validation
-            const isValid = Math.random() > 0.5;  // Randomly simulate user validation
-            return { isValid };
-        },
-        branches: [
-            {
-                condition: (result) => result.isValid === true,
-                next: ['processData'],  // Continue with data processing if valid
-            },
-            {
-                condition: (result) => result.isValid === false,
-                next: ['abort'],  // Abort if the user is not valid
-            },
-        ],
-        timeout: 2000,
-        retry: { maxAttempts: 2, delay: 1000 },
-        onComplete: async (result) => {
-            console.log('User validation completed. Result:', result);
-        },
-    },
-
-    // Data Processing Task: Processes the data if the user is valid
-    {
-        name: 'processData',
-        action: async () => {
-            console.log('Processing data...');
-            return { processed: true };
-        },
-        next: 'finalize',  // After processing, move to the final step
-        timeout: 4000,
-        retry: { maxAttempts: 3, delay: 1000 },
-        onComplete: async (result) => {
-            console.log('Data processing completed. Result:', result);
-        },
-    },
-
-    // Abort Task: If the user is not valid, abort the workflow
-    {
-        name: 'abort',
-        action: async () => {
-            console.log('Aborting workflow due to invalid user.');
-            return { aborted: true };
-        },
-        next: 'finalize',  // Proceed to finalization after abortion
-        timeout: 2000,
-        onComplete: async (result) => {
-            console.log('Workflow aborted. Result:', result);
-        },
-    },
-
-    // Finalize Task: Finalize the workflow regardless of success or failure
-    {
-        name: 'finalize',
-        action: async () => {
-            console.log('Finalizing the workflow...');
-            return { completed: true };
-        },
-        timeout: 1000,
-        onComplete: async (result) => {
-            console.log('Workflow finalized. Result:', result);
-        },
+        dependencies: ['taskA', 'taskB'],
     },
 ];
 
@@ -221,9 +128,6 @@ const workflow = new Workflow('complexWorkflow', tasks, {
     onTaskComplete: (task) => console.log(`Task ${task.name} completed`),
     onTaskError: (error, task) => console.error(`Task ${task.name} failed:`, error),
 });
-
-// Describe the workflow (optional: visualize or print task relationships)
-workflow.describe();  // Outputs the flowchart of tasks and dependencies
 
 // Start the workflow
 workflow.start();
