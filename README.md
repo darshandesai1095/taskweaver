@@ -238,7 +238,7 @@ This will print a flowchart to the console that visually shows how tasks are rel
 
 Example Output:
 
-```javascript
+```bash
 startup
     ├── taskA
     │    └── taskC
