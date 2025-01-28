@@ -148,7 +148,7 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 | `dependencies` | `string[]`                                                | An optional list of task names that need to complete before this task can run.                 |
 | `branches`     | `Array<{ condition: (result: any) => boolean; next: string[] }>` | Conditional branching based on the result. Specifies which tasks to run based on conditions.   |
 | `default`      | `string[]`                                                | Optional default tasks to run if no branch conditions are met.                                 |
-| `next`         | `string | string[]`                                        | Defines the next task(s) to run after this task completes.                                    |
+| `next`         | `string | string[]`                                       | Defines the next task(s) to run after this task completes.                                    |
 | `input`        | `(results: Record<string, any>) => any`                   | A function that provides input to the task based on previous results.                          |
 | `timeout`      | `number`                                                  | An optional timeout (in milliseconds) for how long the task should be allowed to run.          |
 | `retry`        | `{ maxAttempts: number; delay: number }`                  | Retry logic specifying max attempts and delay (in milliseconds) between retries.               |
@@ -176,7 +176,7 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 
 
 ## Dynamic Task Insertion
-You can dynamically add new tasks to an ongoing workflow. When a task is added, it automatically updates the dependencies and determines if the new task can be executed immediately.
+You can dynamically add new tasks to an ongoing workflow. When a task is added, it automatically updates the dependencies and determines if the new task can be executed immediately. By calling the workflow.addTask(newTask: Task) method within a task’s action callback, you can introduce new tasks into the workflow and trigger subsequent tasks based on evolving conditions, offering flexibility to adapt the workflow in real-time as the process progresses.
 
 ```javascript
   const newTask: Task = {
@@ -187,6 +187,8 @@ You can dynamically add new tasks to an ongoing workflow. When a task is added, 
 
   workflow.addTask(newTask);
 ```
+
+or
 
 ```javascript
 // Dynamically adding a new task and branching based on a runtime condition
@@ -218,14 +220,18 @@ workflow.tasks['start'].action = async () => {
 
 ```
 
-This feature enables dynamic modification of a workflow during its execution. By calling the workflow.addTask(newTask: Task) method within a task’s action callback, you can introduce new tasks into the workflow and trigger subsequent tasks based on evolving conditions, offering flexibility to adapt the workflow in real-time as the process progresses.
-
-
-## Summarizing the Workflow
-The describe method generates an ASCII-based flowchart representing the task dependencies in your workflow.
+## Describing the Workflow
+The describe method provides a log of the task dependencies, execution order, and branching logic.
 
 ```javascript
 workflow.describe();
+```
+
+## Visualizing the Workflow
+The visualize method generates an ASCII-based flowchart representing the task dependencies in your workflow.
+
+```javascript
+workflow.visualize();
 ```
 
 This will print a flowchart to the console that visually shows how tasks are related and executed.
