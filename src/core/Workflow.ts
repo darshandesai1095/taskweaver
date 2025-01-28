@@ -4,7 +4,7 @@ import { wait } from './utils';
 
 
 export class Workflow {
-    ref: string;
+    id: string;
     tasks: Record<string, Task>;
     results: Record<string, any>;
     status: 'Pending' | 'Running' | 'Completed' | 'Failed' | 'Cancelled';
@@ -19,13 +19,13 @@ export class Workflow {
     private onTaskError?: (error: Error, task: Task, results: Record<string, any>) => void | Promise<void>;
 
 
-    constructor(ref: string, tasks: Task[], options?: { 
+    constructor(id: string, tasks: Task[], options?: { 
         onTaskStart?: (task: Task) => void | Promise<void>;
         onTaskComplete?: (task: Task) => void | Promise<void>;
         onTaskError?: (error: Error, task: Task, results: Record<string, any>) => void | Promise<void>;
 
      }) {
-        this.ref = ref;
+        this.id = id;
         this.tasks = tasks.reduce((acc, task) => {
             acc[task.name] = task;
             return acc;
