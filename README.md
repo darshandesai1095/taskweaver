@@ -169,6 +169,13 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 | `options.onTaskStart`      | `(task: Task) => void \| Promise<void>`                          | A callback function triggered when a task starts execution. Can be used for logging or monitoring task initiation.  |
 | `options.onTaskComplete`   | `(task: Task) => void \| Promise<void>`                          | A callback function triggered when a task completes execution. Useful for logging, monitoring, or triggering events.  |
 | `options.onTaskError`      | `(task: Task) => void \| Promise<void>`                          | A callback function triggered when a task encounters an error. Allows handling errors, retries, or cleanup actions. |
+| `connectors`          | `Record<string, Connector>)`                                  | A connector for interacting with REST APIs.                                                        |
+| `connectors.rest`      | `(RESTConnector`                          | A callback function triggered when a task starts execution. Can be used for logging or monitoring task initiation.  |
+| `connectors.redis`   | `RedisConnector`                          | A connector for interacting with Redis for caching or data storage.  |
+| `connectors.aws`      | `AWSConnector`                          | A connector for integrating with AWS services like DynamoDB, S3, etc. |
+| `connectors.googleCloud`      | `GoogleCloudConnector`                          | A connector for integrating with Google Cloud services.  |
+| `connectors.mongoDB`   | `MongoDBConnector`                          | A connector for interacting with MongoDB databases.  |
+| `connectors.email`      | `EmailConnector`                          | A connector for sending emails via various email services like Gmail or custom SMTP.|
 
 
 
@@ -242,6 +249,129 @@ startup
     └── taskB
          └── taskC
 ```
+
+## Connectors
+
+In the context of this taskweaver, connectors are modules that allow your tasks to interact with external services, APIs, or databases. Connectors abstract the underlying complexity of different systems (e.g., databases, email servers, cloud services), allowing you to integrate these systems into your task workflows seamlessly.
+
+### RESTConnector
+The RESTConnector allows you to make HTTP requests to external REST APIs. It can be customized to add headers, handle timeouts, and perform retries.
+
+```js
+const restConnector = new RESTConnector({
+  baseUrl: 'https://example.com/api',
+  headers: {
+    'Authorization': 'Bearer your-token',
+  },
+});
+
+await restConnector.get('/endpoint');
+
+```
+
+### RedisConnector
+The RedisConnector allows for interaction with a Redis instance for caching, message queuing, or data storage.
+
+```js
+const redisConnector = new RedisConnector({
+  host: 'localhost',
+  port: 6379,
+});
+
+await redisConnector.set('key', 'value');
+const value = await redisConnector.get('key');
+
+```
+
+### AWSConnector
+The AWSConnector provides integration with AWS services like DynamoDB and S3. It can be configured to work with various AWS services.
+
+```js
+const awsConnector = new AWSConnector({
+  region: 'us-east-1',
+  accessKeyId: 'your-access-key',
+  secretAccessKey: 'your-secret-key',
+});
+
+const data = await awsConnector.getItemFromDynamoDB({ TableName: 'your-table', Key: { id: 'some-id' } });
+
+```
+
+### GoogleCloudConnector
+The GoogleCloudConnector integrates with Google Cloud services such as Firestore, Storage, and others.
+
+```js
+const googleCloudConnector = new GoogleCloudConnector({
+  projectId: 'your-project-id',
+  keyFilename: 'path-to-service-account.json',
+});
+
+const data = await googleCloudConnector.getDocument('your-collection', 'your-document-id');
+
+```
+
+### MongoDBConnector
+The MongoDBConnector connects to MongoDB databases, allowing you to perform CRUD operations and queries.
+
+```js
+const mongoDBConnector = new MongoDBConnector({
+  uri: 'mongodb://localhost:27017',
+  dbName: 'your-database',
+});
+
+const document = await mongoDBConnector.findOne('your-collection', { id: 'some-id' });
+
+```
+
+
+### EmailConnector
+The EmailConnector allows you to send emails using various email services (e.g., Gmail, SMTP). It supports sending plain-text emails, HTML emails, and emails with attachments.
+
+```js
+const emailConnector = new EmailConnector({
+  service: 'gmail',
+  auth: {
+    user: 'your-email@gmail.com',
+    pass: 'your-app-password',
+  },
+});
+
+await emailConnector.sendPlainTextEmail(
+  'recipient@example.com',
+  'Test Subject',
+  'This is a plain text email body'
+);
+
+
+```
+
+## Connector Properties & Setup
+
+| Connector            | Property                  | Type                             | Description                                                                                                                                               | Setup Example                                                                                                      |
+|----------------------|---------------------------|----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| **RESTConnector**     | `baseUrl`                 | `string`                         | The base URL for the REST API.                                                                                                                             | `baseUrl: 'https://example.com/api'`                                                                               |
+|                      | `headers`                 | `Record<string, string>`         | Custom headers for the requests (e.g., authentication headers).                                                                                           | `headers: { 'Authorization': 'Bearer your-token' }`                                                                |
+|                      | `timeout`                 | `number`                         | The timeout duration in milliseconds for the HTTP requests.                                                                                              | `timeout: 5000`                                                                                                    |
+|                      | `retry`                   | `{ maxAttempts: number, delay: number }` | Retry logic for failed requests. Max attempts and delay between retries in milliseconds.                                                                  | `retry: { maxAttempts: 3, delay: 1000 }`                                                                          |
+| **RedisConnector**    | `host`                    | `string`                         | The hostname or IP address of the Redis server.                                                                                                           | `host: 'localhost'`                                                                                                 |
+|                      | `port`                    | `number`                         | The port where the Redis server is running.                                                                                                               | `port: 6379`                                                                                                       |
+|                      | `password`                | `string?`                        | Optional password for Redis authentication.                                                                                                                | `password: 'your-redis-password'`                                                                                   |
+|                      | `db`                      | `number?`                        | The Redis database index (default is 0).                                                                                                                   | `db: 0`                                                                                                            |
+| **AWSConnector**      | `region`                  | `string`                         | The AWS region where your services (e.g., DynamoDB, S3) are located.                                                                                     | `region: 'us-east-1'`                                                                                               |
+|                      | `accessKeyId`             | `string`                         | Your AWS access key.                                                                                                                                       | `accessKeyId: 'your-access-key'`                                                                                   |
+|                      | `secretAccessKey`         | `string`                         | Your AWS secret key.                                                                                                                                       | `secretAccessKey: 'your-secret-key'`                                                                               |
+|                      | `dynamoDBConfig`          | `{ TableName: string, Key: any }`| DynamoDB-specific configuration for querying or performing operations on a table.                                                                         | `dynamoDBConfig: { TableName: 'your-table', Key: { id: 'some-id' } }`                                              |
+| **GoogleCloudConnector** | `projectId`             | `string`                         | The Google Cloud project ID.                                                                                                                               | `projectId: 'your-project-id'`                                                                                      |
+|                      | `keyFilename`             | `string`                         | Path to the service account key file for authentication.                                                                                                 | `keyFilename: 'path-to-service-account.json'`                                                                     |
+|                      | `firestoreCollection`     | `string?`                        | The name of the Firestore collection (if interacting with Firestore).                                                                                      | `firestoreCollection: 'your-collection'`                                                                           |
+| **MongoDBConnector**  | `uri`                     | `string`                         | The URI connection string for MongoDB.                                                                                                                     | `uri: 'mongodb://localhost:27017'`                                                                                  |
+|                      | `dbName`                  | `string`                         | The name of the MongoDB database to use.                                                                                                                   | `dbName: 'your-database'`                                                                                          |
+| **EmailConnector**    | `service`                 | `string`                         | The email service to use (e.g., 'gmail', 'smtp').                                                                                                          | `service: 'gmail'`                                                                                                  |
+|                      | `auth.user`               | `string`                         | The email address used for authentication.                                                                                                                | `auth: { user: 'your-email@gmail.com', pass: 'your-app-password' }`                                                |
+|                      | `auth.pass`               | `string`                         | The email account's password or an app-specific password.                                                                                                 | `auth: { user: 'your-email@gmail.com', pass: 'your-app-password' }`                                                |
+|                      | `from`                    | `string`                         | The "from" email address when sending emails (usually the same as the `auth.user`).                                                                        | `from: 'your-email@gmail.com'`                                                                                      |
+
+---
 
 
 ## License
