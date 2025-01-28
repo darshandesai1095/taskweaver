@@ -8,7 +8,7 @@ TaskWeaver is a simple workflow management system for orchestrating workflows us
 - **Task Dependencies**: Tasks can depend on other tasks, which must be completed before the dependent task starts.
 - **Parallelism**: Execute independent tasks concurrently for maximum efficiency.
 - **Event Handling**: Custom callbacks for task start, completion, and error handling.
-- **Dynamic Task Insertion**: Tasks can be added dynamically after the workflow has started, and their dependencies are managed.
+- **Dynamic Task Insertion**: Tasks can be added dynamically after the workflow starts and their dependencies are managed.
 - **Retries**: Automatically retry failed tasks with configurable limits.
 - **Timeouts**: Tasks have configurable timeouts for their execution.
 - **Error Handling**: Built-in error handling and detailed logs.
@@ -23,7 +23,7 @@ npm install taskweaver
 ```
 ## Sequential Workflow
 
-This example simulates a basic sequential workflow where tasks execution is dependent on completion of the previous tasks. By default, the process will start from the task(s) which have no dependencies, in this case taskA.
+This example simulates a basic sequential workflow where task execution is dependent on the completion of the previous tasks. By default, the process will start from the task(s) which have no dependencies, in this case taskA.
 
 ```javascript
 
