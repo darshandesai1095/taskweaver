@@ -1,6 +1,6 @@
 # TaskWeaver
 
-TaskWeaver is a simple workflow management system for orchestrating workflows using Directed Acyclic Graphs (DAGs). It allows you to define tasks with dependencies and execute them in the correct order, with support for retries, parallelism, and error handling.
+TaskWeaver is a simple task management system for orchestrating workflows using Directed Acyclic Graphs (DAGs). It allows you to define tasks with dependencies and execute them in the correct order, with support for retries, parallelism, and error handling.
 
 ## Features
 
