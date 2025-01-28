@@ -165,8 +165,10 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 |--------------------|------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
 | `id`               | `string`                                                         | The reference or identifier for the workflow.                                                                       |
 | `tasks`            | `Record<string, Task>`                                           | A record of tasks in the workflow, with task names as keys and `Task` objects as values.                            |
-| `results`          | `Record<string, any>`                                            | A record of task results, where the task name is the key, and the result of the task is the value.                  |
-| `newTasksQueue`    | `Task[]`                                                         | A queue of tasks that are newly added to the workflow.                                                              |
+| `options`          | `Object (optional)`                                              | The reference or identifier for the workflow.                                                                       |
+| `onTaskStart`      | `(task: Task) => void \| Promise<void>`                          | A callback function triggered when a task starts execution. Can be used for logging or monitoring task initiation.  |
+| `onTaskComplete`   | `(task: Task) => void \| Promise<void>`                          | A callback function triggered when a task completes execution. Useful for logging, monitoring, or triggering events.  |
+| `onTaskError`      | `(task: Task) => void \| Promise<void>`                          | A callback function triggered when a task encounters an error. Allows handling errors, retries, or cleanup actions. |
 
 
 
