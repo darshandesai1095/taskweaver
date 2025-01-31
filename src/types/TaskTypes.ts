@@ -3,11 +3,11 @@ export interface Task {
     action: (input?: any) => Promise<any>;
     dependencies?: string[];
     branches?: Array<{
-        condition: (result: any) => boolean;
+        condition: (results: Record<string, any>) => boolean;
         next: string[];
     }>;
     default?: string[];
-    next?: string;
+    next?: string[];
     input?: (results: Record<string, any>) => any;
     timeout?: number;
     retry?: { maxAttempts: number; delay: number };
@@ -16,6 +16,5 @@ export interface Task {
     onError?: (error: Error, task: Task, results: Record<string, any>) => void | Promise<Task | Task[] | null | any>;
     metadata?: Record<string, any>;
     progress?: number;
-    runIf?: (results: Record<string, any>) => boolean;
-    logs?: string[];
+    runIf?: (results: Record<string, any>) => boolean | Promise<boolean>;
 }

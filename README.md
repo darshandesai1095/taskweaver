@@ -152,8 +152,7 @@ When creating a workflow, you can customize the behavior of individual tasks by 
 | `onComplete`   | `(result: Record<string, any>) => any`                             | Callback function for task completion. Can return the next task(s) or `null` to finish.                 |
 | `onError`      | `(error: Error, task: Task, results: Record<string, any>) => any`  | Callback function for when an error occurs during task execution.                                       |
 | `metadata`     | `Record<string, any>`                                              | Optional metadata related to the task (e.g., for logging or tracking).                                  |
-| `progress`     | `number`                                                           | Optional property that can track the progress of the task as a percentage (0-100).                      |
-| `runIf`        | `(results: Record<string, any>) => boolean`                        | A function that determines whether the task should run based on previous results.                       |
+| `runIf`        | `(results: Record<string, any>) => boolean \| Promise<boolean>;`   | A function that determines whether the task should run based on previous results.                       |
 | `logs`         | `string[]`                                                         | Optional array to store logs related to the task.                                                       |
 
 

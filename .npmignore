@@ -3,3 +3,5 @@ tests/
 *.test.ts
 tsconfig.json
 .gitignore
+
+src/connectors/*
